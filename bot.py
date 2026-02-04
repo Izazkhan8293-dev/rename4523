@@ -24,9 +24,6 @@ async def run_bot():
 
 # ------------------ Entry Point ------------------
 if __name__ == "__main__":
-    # Start Flask server in a separate thread
     web_thread = threading.Thread(target=run_web)
     web_thread.start()
-
-    # Start Pyrogram bot in async event loop
     asyncio.run(run_bot())
