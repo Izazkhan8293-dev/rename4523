@@ -4,7 +4,7 @@ import asyncio
 from flask import Flask
 from plugins.cb_data import app  # only import app
 from pyrogram import idle
-from plugins.cb_data import app  # the Client instance
+
 
 # Don't import individual handlers
 # Just let plugins dict handle them
