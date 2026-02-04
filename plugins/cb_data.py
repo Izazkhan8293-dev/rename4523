@@ -6,18 +6,23 @@ import os
 import asyncio
 import time
 
-
-
-
-    # normal bot token login for now
-
-app = Client(
+if STRING_SESSION:
+    app = Client(
+        name="my_bot",
+        api_id=API_ID,
+        api_hash=API_HASH,
+        session_string=STRING_SESSION,  # avoids re-authorization
+        plugins=dict(root="plugins")
+    )
+else:
+    app = Client(
         name="my_bot",
         api_id=API_ID,
         api_hash=API_HASH,
         bot_token=BOT_TOKEN,
         plugins=dict(root="plugins")
     )
+
 
 # ------------------ /start ------------------
 @app.on_message(filters.private & filters.command("start"))
