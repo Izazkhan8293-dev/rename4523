@@ -6,17 +6,9 @@ import os
 import asyncio
 import time
 
-# ------------------ Client ------------------
-if STRING_SESSION:
-    # optional session for future 4GB
-    app = Client(
-        name="my_bot",
-        api_id=API_ID,
-        api_hash=API_HASH,
-        session_string=STRING_SESSION,
-        plugins=dict(root="plugins")
-    )
-else:
+
+
+
     # normal bot token login for now
     app = Client(
         name="my_bot",
