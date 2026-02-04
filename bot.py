@@ -27,7 +27,6 @@ async def run_bot():
 
 if __name__ == "__main__":
     threading.Thread(target=run_web, daemon=True).start()
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    loop.run_until_complete(run_bot())
+   
+   
 
