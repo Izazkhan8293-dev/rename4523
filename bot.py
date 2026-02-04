@@ -25,8 +25,6 @@ async def run_bot():
     await idle()
     await app.stop()
 
-if __name__ == "__main__":
-    threading.Thread(target=run_web, daemon=True).start()
-   
+
    
 
