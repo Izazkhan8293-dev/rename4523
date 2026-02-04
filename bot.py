@@ -4,6 +4,7 @@ import asyncio
 from flask import Flask
 from plugins.cb_data import app
 from pyrogram import idle
+from config import STRING_SESSION, API_ID, API_HASH, BOT_TOKEN
 
 # Flask web server
 web_app = Flask(__name__)
