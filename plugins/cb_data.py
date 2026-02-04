@@ -1,12 +1,14 @@
 from pyrogram import Client, filters
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 from helper.progress import progress_for_pyrogram
+from plugins.utils import download_file, upload_file
+from plugins.thumbnail import get_thumbnail
 from config import *
 import os
 import asyncio
 import time
 
-# ----------- Session-Based Client -----------
+# ------------------ Session-Based Client -----------
 app = Client(
     name="my_bot",
     api_id=API_ID,
@@ -15,22 +17,21 @@ app = Client(
     plugins=dict(root="plugins")
 )
 
-# ----------- /start Command -----------
+# ------------------ /start Command -----------
 @app.on_message(filters.private & filters.command("start"))
 async def start(bot: Client, message: Message):
-    await message.reply_text(
-        text="👋 Hello! I am your Rename-Bot-4GB (session-based).\nSend me a file to rename.",
-        reply_markup=InlineKeyboardMarkup(
-            [[InlineKeyboardButton("Channel", url="https://t.me/JishuBotz")]]
-        ),
+    await message.reply_photo(
+        photo=START_PIC or "",
+        caption="👋 Hello! I am Rename-Bot-4GB (session-based).\nSend me a file to rename.",
+        reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Channel", url="https://t.me/JishuBotz")]])
     )
 
-# ----------- Cancel Callback -----------
+# ------------------ Cancel Callback -----------
 @app.on_callback_query(filters.regex("cancel"))
 async def cancel(bot: Client, update):
     await update.message.edit("❌ Operation Cancelled!")
 
-# ----------- /rename Handler -----------
+# ------------------ /rename Handler -----------
 @app.on_message(filters.private & filters.document)
 async def rename_file(bot: Client, message: Message):
     m = await message.reply_text("✏️ Send me the new file name (with extension):")
@@ -43,25 +44,14 @@ async def rename_file(bot: Client, message: Message):
     await m.edit("⚡ Downloading file...")
 
     start_time = time.time()
-    file_path = await bot.download_media(
-        message,
-        file_name=new_file_name,
-        progress=progress_for_pyrogram,
-        progress_args=("Downloading...", m, start_time)
-    )
+    file_path = await download_file(bot, message, new_file_name, m, start_time)
+
+    # Optional thumbnail
+    thumb = await get_thumbnail(message.chat.id)
 
     await m.edit("⚡ Uploading file...")
-    await bot.send_document(
-        chat_id=message.chat.id,
-        document=file_path,
-        caption=f"✅ Renamed to `{new_file_name}`",
-        progress=progress_for_pyrogram,
-        progress_args=("Uploading...", m, start_time)
-    )
+    await upload_file(bot, message.chat.id, file_path, new_file_name, m, start_time, thumb)
 
-    try:
-        os.remove(file_path)
-    except:
-        pass
-
+    try: os.remove(file_path)
+    except: pass
     await m.delete()
