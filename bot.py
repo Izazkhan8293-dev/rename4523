@@ -22,6 +22,22 @@ async def run_bot():
     await idle()
     await app.stop()
 
+if STRING_SESSION:
+    app = Client(
+        name="my_bot",
+        api_id=API_ID,
+        api_hash=API_HASH,
+        session_string=STRING_SESSION,
+        plugins=dict(root="plugins")  # <-- must match your folder
+    )
+else:
+    app = Client(
+        name="my_bot",
+        api_id=API_ID,
+        api_hash=API_HASH,
+        bot_token=BOT_TOKEN,
+        plugins=dict(root="plugins")
+    )
 if __name__ == "__main__":
     # Start Flask in a separate thread
     threading.Thread(target=run_web, daemon=True).start()
