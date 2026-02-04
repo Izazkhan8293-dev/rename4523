@@ -2,7 +2,7 @@ import os
 import threading
 import asyncio
 from flask import Flask
-from plugins.cb_data import app
+from plugins.cb_data import client, app
 from pyrogram import idle
 from config import STRING_SESSION, API_ID, API_HASH, BOT_TOKEN
 
